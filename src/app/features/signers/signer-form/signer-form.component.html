@@ -1,22 +1,22 @@
-<h2 mat-dialog-title>Editar Signatário</h2>
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Signatário' : 'Novo Signatário' }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nome</mat-label>
-      <input matInput formControlName="name" />
-      @if (form.get('name')?.hasError('required')) {
+      <input matInput formControlName="name" placeholder="Nome completo" />
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
         <mat-error>Nome é obrigatório.</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>E-mail</mat-label>
-      <input matInput formControlName="email" type="email" />
-      @if (form.get('email')?.hasError('required')) {
+      <input matInput formControlName="email" type="email" placeholder="email@exemplo.com" />
+      @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
         <mat-error>E-mail é obrigatório.</mat-error>
       }
-      @if (form.get('email')?.hasError('email')) {
+      @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
         <mat-error>E-mail inválido.</mat-error>
       }
     </mat-form-field>
@@ -29,7 +29,7 @@
     @if (loading) {
       <mat-spinner diameter="18"></mat-spinner>
     } @else {
-      Salvar
+      {{ isEdit ? 'Salvar' : 'Criar' }}
     }
   </button>
 </mat-dialog-actions>

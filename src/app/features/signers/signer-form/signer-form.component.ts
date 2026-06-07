@@ -21,32 +21,41 @@ import { Signer } from '../../../core/models';
     MatProgressSpinnerModule,
   ],
   templateUrl: './signer-form.component.html',
+  styleUrl: './signer-form.component.scss',
 })
 export class SignerFormComponent implements OnInit {
   form!: FormGroup;
   loading = false;
+  isEdit: boolean;
 
   constructor(
     private fb: FormBuilder,
     private signerService: SignerService,
     private notification: NotificationService,
     private dialogRef: MatDialogRef<SignerFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Signer
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: Signer | null
+  ) {
+    this.isEdit = !!data;
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: [this.data.name, [Validators.required, Validators.minLength(2)]],
-      email: [this.data.email, [Validators.required, Validators.email]],
+      name: [this.data?.name ?? '', [Validators.required, Validators.minLength(2)]],
+      email: [this.data?.email ?? '', [Validators.required, Validators.email]],
     });
   }
 
   submit(): void {
     if (this.form.invalid) return;
     this.loading = true;
-    this.signerService.update(this.data.id, this.form.value).subscribe({
+
+    const action$ = this.isEdit
+      ? this.signerService.update(this.data!.id, this.form.value)
+      : this.signerService.create(this.form.value);
+
+    action$.subscribe({
       next: () => {
-        this.notification.success('Signatário atualizado!');
+        this.notification.success(this.isEdit ? 'Signatário atualizado!' : 'Signatário criado!');
         this.dialogRef.close(true);
       },
       error: () => (this.loading = false),

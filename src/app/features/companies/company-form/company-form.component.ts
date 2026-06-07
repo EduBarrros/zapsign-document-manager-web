@@ -21,6 +21,7 @@ import { Company } from '../../../core/models';
     MatProgressSpinnerModule,
   ],
   templateUrl: './company-form.component.html',
+  styleUrl: './company-form.component.scss',
 })
 export class CompanyFormComponent implements OnInit {
   form!: FormGroup;

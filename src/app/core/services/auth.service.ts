@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { LoginDto, LoginResponse, SignupDto } from '../models';
 
 const TOKEN_KEY = 'auth_token';
+const EMAIL_KEY = 'auth_email';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -16,19 +17,30 @@ export class AuthService {
 
   login(dto: LoginDto): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login/`, dto).pipe(
-      tap((res) => this.storeToken(res))
+      tap((res) => {
+        this.storeToken(res);
+        localStorage.setItem(EMAIL_KEY, dto.email);
+      })
     );
   }
 
   signup(dto: SignupDto): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/signup/`, dto).pipe(
-      tap((res) => this.storeToken(res))
+      tap((res) => {
+        this.storeToken(res);
+        localStorage.setItem(EMAIL_KEY, dto.email);
+      })
     );
   }
 
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(EMAIL_KEY);
     this.router.navigate(['/login']);
+  }
+
+  getEmail(): string | null {
+    return localStorage.getItem(EMAIL_KEY);
   }
 
   isAuthenticated(): boolean {

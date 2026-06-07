@@ -23,7 +23,7 @@ export class SignerService {
     return this.http.get<Signer>(`${this.baseUrl}/${id}/`);
   }
 
-  create(dto: CreateSignerDto & { document: number }): Observable<Signer> {
+  create(dto: CreateSignerDto): Observable<Signer> {
     return this.http.post<Signer>(`${this.baseUrl}/`, dto);
   }
 

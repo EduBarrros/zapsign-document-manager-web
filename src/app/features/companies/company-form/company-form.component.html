@@ -5,7 +5,7 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nome da empresa</mat-label>
       <input matInput formControlName="name" placeholder="Ex: Acme Corp" />
-      @if (form.get('name')?.hasError('required')) {
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
         <mat-error>Nome é obrigatório.</mat-error>
       }
     </mat-form-field>
@@ -14,7 +14,7 @@
       <mat-label>{{ isEdit ? 'Novo token da API ZapSign (opcional)' : 'Token da API ZapSign' }}</mat-label>
       <input matInput formControlName="api_token" placeholder="Cole o token gerado no sandbox" />
       <mat-hint>Obtenha o token no painel do sandbox ZapSign</mat-hint>
-      @if (form.get('api_token')?.hasError('required')) {
+      @if (form.get('api_token')?.hasError('required') && form.get('api_token')?.touched) {
         <mat-error>Token é obrigatório.</mat-error>
       }
     </mat-form-field>
