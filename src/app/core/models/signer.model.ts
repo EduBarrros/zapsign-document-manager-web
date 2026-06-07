@@ -1,15 +1,16 @@
+export type SignerStatus = 'pending' | 'signed' | 'rejected';
+
 export interface Signer {
   id: number;
-  token: string;
-  status: string;
   name: string;
   email: string;
-  external_id?: string;
-  document_id: number;
+  token: string | null;
+  external_id: string | null;
+  status: SignerStatus;
+  sign_url: string | null;
 }
 
 export interface CreateSignerDto {
   name: string;
   email: string;
-  external_id?: string;
 }

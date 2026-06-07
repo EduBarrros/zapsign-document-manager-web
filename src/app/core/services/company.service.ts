@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Company, CreateCompanyDto, UpdateCompanyDto } from '../models';
+import { Company, CreateCompanyDto, UpdateCompanyDto, PaginatedResponse } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class CompanyService {
@@ -11,7 +11,9 @@ export class CompanyService {
   constructor(private http: HttpClient) {}
 
   list(): Observable<Company[]> {
-    return this.http.get<Company[]>(this.baseUrl);
+    return this.http
+      .get<PaginatedResponse<Company>>(`${this.baseUrl}/`)
+      .pipe(map((r) => r.results));
   }
 
   getById(id: number): Observable<Company> {

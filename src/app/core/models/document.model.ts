@@ -1,37 +1,40 @@
 import { Signer, CreateSignerDto } from './signer.model';
 
+export type DocumentStatus = 'pending' | 'signed' | 'cancelled';
+
 export interface Document {
   id: number;
-  open_id: number;
-  token: string;
   name: string;
-  status: string;
+  status: DocumentStatus;
+  open_id: number | null;
+  token: string | null;
+  url_pdf: string | null;
+  external_id: string | null;
   created_at: string;
   last_updated_at: string;
   created_by: string;
-  company_id: number;
-  external_id?: string;
-  pdf_url?: string;
+  company: number;
   signers: Signer[];
-  ai_analysis?: AiAnalysis;
-}
-
-export interface AiAnalysis {
-  summary: string;
-  missing_topics: string[];
-  insights: string[];
-  analyzed_at: string;
+  ai_summary: string | null;
+  ai_missing_topics: string[] | null;
+  ai_insights: string | null;
 }
 
 export interface CreateDocumentDto {
   name: string;
-  pdf_url: string;
-  company_id: number;
-  external_id?: string;
+  created_by: string;
+  company: number;
+  url_pdf: string;
   signers: CreateSignerDto[];
 }
 
 export interface UpdateDocumentDto {
   name?: string;
-  status?: string;
+}
+
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 }

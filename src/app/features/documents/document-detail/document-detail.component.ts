@@ -37,7 +37,7 @@ export class DocumentDetailComponent implements OnInit {
   document: Document | null = null;
   loading = false;
   analyzeLoading = false;
-  signerColumns = ['name', 'email', 'status', 'token'];
+  signerColumns = ['name', 'email', 'status', 'token', 'sign_url'];
 
   constructor(
     private route: ActivatedRoute,
@@ -66,8 +66,8 @@ export class DocumentDetailComponent implements OnInit {
     if (!this.document) return;
     this.analyzeLoading = true;
     this.documentService.reanalyze(this.document.id).subscribe({
-      next: (analysis) => {
-        this.document = { ...this.document!, ai_analysis: analysis };
+      next: (updated) => {
+        this.document = updated;
         this.analyzeLoading = false;
         this.notification.success('Análise concluída!');
       },
