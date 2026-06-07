@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Documento' : 'Novo Documento' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome do documento</mat-label>
+      <input matInput formControlName="name" placeholder="Ex: Contrato de Prestação de Serviços" />
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>Nome é obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>URL do PDF</mat-label>
+      <input matInput formControlName="pdf_url" placeholder="https://..." />
+      <mat-hint>Link público para o arquivo PDF</mat-hint>
+      @if (form.get('pdf_url')?.hasError('required')) {
+        <mat-error>URL do PDF é obrigatória.</mat-error>
+      }
+      @if (form.get('pdf_url')?.hasError('pattern')) {
+        <mat-error>URL inválida. Deve começar com http:// ou https://</mat-error>
+      }
+    </mat-form-field>
+
+    @if (!isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Empresa</mat-label>
+        <mat-select formControlName="company_id">
+          @for (company of companies; track company.id) {
+            <mat-option [value]="company.id">{{ company.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('company_id')?.hasError('required')) {
+          <mat-error>Selecione uma empresa.</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    @if (!isEdit) {
+      <mat-divider></mat-divider>
+      <h3 class="section-title">Signatários</h3>
+
+      <div formArrayName="signers">
+        @for (signer of signersArray.controls; track $index; let i = $index) {
+          <div [formGroupName]="i" class="signer-group">
+            <div class="signer-header">
+              <span class="signer-label">Signatário {{ i + 1 }}</span>
+              @if (signersArray.length > 1) {
+                <button mat-icon-button type="button" color="warn" (click)="removeSigner(i)" matTooltip="Remover">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              }
+            </div>
+            <div class="signer-fields">
+              <mat-form-field appearance="outline" class="signer-name">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="name" placeholder="Nome completo" />
+                @if (signer.get('name')?.hasError('required')) {
+                  <mat-error>Nome obrigatório.</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="signer-email">
+                <mat-label>E-mail</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="email@exemplo.com" />
+                @if (signer.get('email')?.hasError('required')) {
+                  <mat-error>E-mail obrigatório.</mat-error>
+                }
+                @if (signer.get('email')?.hasError('email')) {
+                  <mat-error>E-mail inválido.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button mat-stroked-button type="button" (click)="addSigner()" class="add-signer-btn">
+        <mat-icon>person_add</mat-icon>
+        Adicionar signatário
+      </button>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()" [disabled]="loading">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading || form.invalid">
+    @if (loading) {
+      <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+      {{ isEdit ? 'Salvar' : 'Criar e enviar para ZapSign' }}
+    }
+  </button>
+</mat-dialog-actions>

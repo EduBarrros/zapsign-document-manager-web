@@ -1,0 +1,159 @@
+<div class="page-container">
+  <div class="back-btn">
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-wrapper">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (document && !loading) {
+    <div class="detail-grid">
+      <!-- Informações do Documento -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>{{ document.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <app-status-chip [status]="document.status"></app-status-chip>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Token ZapSign</span>
+              <code class="info-value token-value">{{ document.token }}</code>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Open ID</span>
+              <span class="info-value">{{ document.open_id }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Criado por</span>
+              <span class="info-value">{{ document.created_by }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Data de criação</span>
+              <span class="info-value">{{ document.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            @if (document.pdf_url) {
+              <div class="info-item full-width">
+                <span class="info-label">URL do PDF</span>
+                <a [href]="document.pdf_url" target="_blank" class="info-link">
+                  <mat-icon class="link-icon">open_in_new</mat-icon>
+                  Abrir PDF
+                </a>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Análise de IA -->
+      <mat-card class="ai-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="ai-icon">psychology</mat-icon>
+          <mat-card-title>Análise de IA</mat-card-title>
+          <mat-card-subtitle>Insights automáticos sobre o documento</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          @if (!document.ai_analysis) {
+            <div class="ai-empty">
+              <mat-icon>auto_awesome</mat-icon>
+              <p>Análise não realizada ainda.</p>
+            </div>
+          } @else {
+            <div class="ai-content">
+              <h4 class="ai-section-label">Resumo</h4>
+              <p class="ai-summary">{{ document.ai_analysis.summary }}</p>
+
+              @if (document.ai_analysis.missing_topics.length > 0) {
+                <h4 class="ai-section-label warning-label">
+                  <mat-icon>warning</mat-icon>
+                  Tópicos faltantes
+                </h4>
+                <ul class="ai-list">
+                  @for (topic of document.ai_analysis.missing_topics; track topic) {
+                    <li>{{ topic }}</li>
+                  }
+                </ul>
+              }
+
+              @if (document.ai_analysis.insights.length > 0) {
+                <h4 class="ai-section-label">
+                  <mat-icon>lightbulb</mat-icon>
+                  Insights
+                </h4>
+                <ul class="ai-list insights-list">
+                  @for (insight of document.ai_analysis.insights; track insight) {
+                    <li>{{ insight }}</li>
+                  }
+                </ul>
+              }
+
+              <p class="ai-timestamp">
+                Analisado em {{ document.ai_analysis.analyzed_at | date:'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+          }
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-stroked-button color="primary" (click)="reanalyze()" [disabled]="analyzeLoading">
+            @if (analyzeLoading) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <ng-container>
+                <mat-icon>refresh</mat-icon>
+                Reanalisar com IA
+              </ng-container>
+            }
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Signatários -->
+      <mat-card class="signers-card">
+        <mat-card-header>
+          <mat-card-title>Signatários</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (document.signers.length === 0) {
+            <p class="no-signers">Nenhum signatário vinculado.</p>
+          } @else {
+            <table mat-table [dataSource]="document.signers" class="full-width-table">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nome</th>
+                <td mat-cell *matCellDef="let s">{{ s.name }}</td>
+              </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>E-mail</th>
+                <td mat-cell *matCellDef="let s">{{ s.email }}</td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let s">
+                  <app-status-chip [status]="s.status"></app-status-chip>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="token">
+                <th mat-header-cell *matHeaderCellDef>Token</th>
+                <td mat-cell *matCellDef="let s">
+                  <code class="token-value">{{ s.token }}</code>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="signerColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: signerColumns;"></tr>
+            </table>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

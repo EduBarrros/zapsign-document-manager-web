@@ -1,0 +1,45 @@
+@use '../../../shared/styles/page' as *;
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 12px 0 8px;
+}
+
+.signer-group {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.signer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .signer-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.signer-fields {
+  display: flex;
+  gap: 12px;
+
+  .signer-name {
+    flex: 1;
+  }
+
+  .signer-email {
+    flex: 1.5;
+  }
+}
+
+.add-signer-btn {
+  margin-top: 4px;
+}
