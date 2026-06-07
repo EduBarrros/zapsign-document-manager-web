@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (scale: 0),
+));
+
+html {
+  @include mat.all-component-themes($theme);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.snack-success {
+  background-color: #43a047;
+  color: white;
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white;
+  }
+}
+
+.snack-error {
+  background-color: #e53935;
+  color: white;
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white;
+  }
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 12px;
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-shape: 12px;
+}
