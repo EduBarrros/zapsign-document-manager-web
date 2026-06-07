@@ -12,25 +12,33 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>URL do PDF</mat-label>
-      <input matInput formControlName="pdf_url" placeholder="https://..." />
+      <input matInput formControlName="url_pdf" placeholder="https://..." />
       <mat-hint>Link público para o arquivo PDF</mat-hint>
-      @if (form.get('pdf_url')?.hasError('required')) {
+      @if (form.get('url_pdf')?.hasError('required')) {
         <mat-error>URL do PDF é obrigatória.</mat-error>
       }
-      @if (form.get('pdf_url')?.hasError('pattern')) {
+      @if (form.get('url_pdf')?.hasError('pattern')) {
         <mat-error>URL inválida. Deve começar com http:// ou https://</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Criado por</mat-label>
+      <input matInput formControlName="created_by" placeholder="Nome do responsável" />
+      @if (form.get('created_by')?.hasError('required')) {
+        <mat-error>Campo obrigatório.</mat-error>
       }
     </mat-form-field>
 
     @if (!isEdit) {
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Empresa</mat-label>
-        <mat-select formControlName="company_id">
+        <mat-select formControlName="company">
           @for (company of companies; track company.id) {
             <mat-option [value]="company.id">{{ company.name }}</mat-option>
           }
         </mat-select>
-        @if (form.get('company_id')?.hasError('required')) {
+        @if (form.get('company')?.hasError('required')) {
           <mat-error>Selecione uma empresa.</mat-error>
         }
       </mat-form-field>

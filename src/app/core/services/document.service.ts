@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Document, CreateDocumentDto, UpdateDocumentDto, AiAnalysis } from '../models';
+import {
+  Document,
+  CreateDocumentDto,
+  UpdateDocumentDto,
+  PaginatedResponse,
+} from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -10,13 +15,13 @@ export class DocumentService {
 
   constructor(private http: HttpClient) {}
 
-  list(companyId?: number): Observable<Document[]> {
-    if (companyId) {
-      return this.http.get<Document[]>(`${this.baseUrl}/`, {
-        params: { company_id: companyId.toString() },
-      });
-    }
-    return this.http.get<Document[]>(`${this.baseUrl}/`);
+  list(filters?: { company?: number; status?: string }): Observable<Document[]> {
+    const params: Record<string, string> = {};
+    if (filters?.company) params['company'] = filters.company.toString();
+    if (filters?.status) params['status'] = filters.status;
+    return this.http
+      .get<PaginatedResponse<Document>>(`${this.baseUrl}/`, { params })
+      .pipe(map((r) => r.results));
   }
 
   getById(id: number): Observable<Document> {
@@ -35,11 +40,7 @@ export class DocumentService {
     return this.http.delete<void>(`${this.baseUrl}/${id}/`);
   }
 
-  reanalyze(id: number): Observable<AiAnalysis> {
-    return this.http.post<AiAnalysis>(`${this.baseUrl}/${id}/analyze/`, {});
-  }
-
-  getReport(id: number): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/${id}/report/`, { responseType: 'blob' });
+  reanalyze(id: number): Observable<Document> {
+    return this.http.post<Document>(`${this.baseUrl}/${id}/analyze/`, {});
   }
 }

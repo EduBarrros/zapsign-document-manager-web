@@ -40,7 +40,7 @@ export class CompanyFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       name: [this.data?.name ?? '', [Validators.required, Validators.minLength(2)]],
-      api_token: [this.data?.api_token ?? '', [Validators.required]],
+      api_token: ['', this.isEdit ? [] : [Validators.required]],
     });
   }
 

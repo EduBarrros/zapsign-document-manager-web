@@ -41,10 +41,10 @@
               <span class="info-label">Data de criação</span>
               <span class="info-value">{{ document.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
-            @if (document.pdf_url) {
+            @if (document.url_pdf) {
               <div class="info-item full-width">
                 <span class="info-label">URL do PDF</span>
-                <a [href]="document.pdf_url" target="_blank" class="info-link">
+                <a [href]="document.url_pdf" target="_blank" class="info-link">
                   <mat-icon class="link-icon">open_in_new</mat-icon>
                   Abrir PDF
                 </a>
@@ -63,7 +63,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          @if (!document.ai_analysis) {
+          @if (!document.ai_summary) {
             <div class="ai-empty">
               <mat-icon>auto_awesome</mat-icon>
               <p>Análise não realizada ainda.</p>
@@ -71,35 +71,27 @@
           } @else {
             <div class="ai-content">
               <h4 class="ai-section-label">Resumo</h4>
-              <p class="ai-summary">{{ document.ai_analysis.summary }}</p>
+              <p class="ai-summary">{{ document.ai_summary }}</p>
 
-              @if (document.ai_analysis.missing_topics.length > 0) {
+              @if (document.ai_missing_topics && document.ai_missing_topics.length > 0) {
                 <h4 class="ai-section-label warning-label">
                   <mat-icon>warning</mat-icon>
                   Tópicos faltantes
                 </h4>
                 <ul class="ai-list">
-                  @for (topic of document.ai_analysis.missing_topics; track topic) {
+                  @for (topic of document.ai_missing_topics; track topic) {
                     <li>{{ topic }}</li>
                   }
                 </ul>
               }
 
-              @if (document.ai_analysis.insights.length > 0) {
+              @if (document.ai_insights) {
                 <h4 class="ai-section-label">
                   <mat-icon>lightbulb</mat-icon>
                   Insights
                 </h4>
-                <ul class="ai-list insights-list">
-                  @for (insight of document.ai_analysis.insights; track insight) {
-                    <li>{{ insight }}</li>
-                  }
-                </ul>
+                <p class="ai-insights-text">{{ document.ai_insights }}</p>
               }
-
-              <p class="ai-timestamp">
-                Analisado em {{ document.ai_analysis.analyzed_at | date:'dd/MM/yyyy HH:mm' }}
-              </p>
             </div>
           }
         </mat-card-content>
@@ -146,6 +138,17 @@
                 <th mat-header-cell *matHeaderCellDef>Token</th>
                 <td mat-cell *matCellDef="let s">
                   <code class="token-value">{{ s.token }}</code>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="sign_url">
+                <th mat-header-cell *matHeaderCellDef>Link de assinatura</th>
+                <td mat-cell *matCellDef="let s">
+                  @if (s.sign_url) {
+                    <a [href]="s.sign_url" target="_blank" class="sign-link">
+                      <mat-icon class="link-icon">draw</mat-icon>
+                      Assinar
+                    </a>
+                  }
                 </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="signerColumns"></tr>

@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DocumentService } from '../../../core/services/document.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Document, Company } from '../../../core/models';
 
 @Component({
@@ -41,6 +42,7 @@ export class DocumentFormComponent implements OnInit {
     private documentService: DocumentService,
     private companyService: CompanyService,
     private notification: NotificationService,
+    private authService: AuthService,
     private dialogRef: MatDialogRef<DocumentFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Document | null
   ) {
@@ -50,8 +52,9 @@ export class DocumentFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       name: [this.data?.name ?? '', [Validators.required, Validators.minLength(2)]],
-      pdf_url: [this.data?.pdf_url ?? '', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
-      company_id: [this.data?.company_id ?? null, Validators.required],
+      url_pdf: [this.data?.url_pdf ?? '', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+      company: [this.data?.company ?? null, Validators.required],
+      created_by: [this.data?.created_by ?? '', Validators.required],
       signers: this.fb.array(
         this.data?.signers?.map((s) =>
           this.fb.group({
