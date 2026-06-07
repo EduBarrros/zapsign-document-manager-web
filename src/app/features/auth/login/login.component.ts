@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import { NotificationService } from '../../../core/services/notification.service
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -29,6 +30,7 @@ export class LoginComponent {
   form: FormGroup;
   loading = false;
   hidePassword = true;
+  authError: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -37,7 +39,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
@@ -45,10 +47,15 @@ export class LoginComponent {
   submit(): void {
     if (this.form.invalid) return;
     this.loading = true;
+    this.authError = null;
     this.authService.login(this.form.value).subscribe({
-      next: () => this.router.navigate(['/documents']),
+      next: () => {
+        this.notification.success('Login realizado com sucesso!');
+        this.loading = false;
+        this.router.navigate(['/companies']);
+      },
       error: () => {
-        this.notification.error('Usuário ou senha inválidos.');
+        this.authError = 'E-mail ou senha incorretos.';
         this.loading = false;
       },
     });
