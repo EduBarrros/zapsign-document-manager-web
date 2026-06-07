@@ -30,7 +30,7 @@ import { StatusChipComponent } from '../../../shared/components/status-chip/stat
 })
 export class SignerListComponent implements OnInit {
   signers: Signer[] = [];
-  displayedColumns = ['name', 'email', 'status', 'document_id', 'actions'];
+  displayedColumns = ['name', 'email', 'status', 'actions'];
   loading = false;
 
   constructor(
@@ -51,6 +51,16 @@ export class SignerListComponent implements OnInit {
         this.loading = false;
       },
       error: () => (this.loading = false),
+    });
+  }
+
+  openCreate(): void {
+    const ref = this.dialog.open(SignerFormComponent, {
+      width: '480px',
+      data: null,
+    });
+    ref.afterClosed().subscribe((result) => {
+      if (result) this.load();
     });
   }
 

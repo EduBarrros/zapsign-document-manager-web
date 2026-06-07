@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { AuthService } from '../../core/services/auth.service';
 
 interface NavItem {
   label: string;
@@ -23,4 +24,10 @@ export class SidebarComponent {
     { label: 'Documentos', icon: 'description', route: '/documents' },
     { label: 'Signatários', icon: 'people', route: '/signers' },
   ];
+
+  constructor(private authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

@@ -13,4 +13,5 @@ export interface Signer {
 export interface CreateSignerDto {
   name: string;
   email: string;
+  document?: number;
 }

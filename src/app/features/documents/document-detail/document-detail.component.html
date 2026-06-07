@@ -16,11 +16,9 @@
     <div class="detail-grid">
       <!-- Informações do Documento -->
       <mat-card class="info-card">
-        <mat-card-header>
+        <mat-card-header class="doc-card-header">
           <mat-card-title>{{ document.name }}</mat-card-title>
-          <mat-card-subtitle>
-            <app-status-chip [status]="document.status"></app-status-chip>
-          </mat-card-subtitle>
+          <app-status-chip [status]="document.status"></app-status-chip>
         </mat-card-header>
 
         <mat-card-content>
@@ -69,35 +67,52 @@
               <p>Análise não realizada ainda.</p>
             </div>
           } @else {
-            <div class="ai-content">
-              <h4 class="ai-section-label">Resumo</h4>
-              <p class="ai-summary">{{ document.ai_summary }}</p>
+            <mat-accordion class="ai-accordion" multi>
+
+              <mat-expansion-panel expanded>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="ai-panel-title">
+                    <mat-icon>summarize</mat-icon>
+                    Resumo
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p class="ai-summary">{{ document.ai_summary }}</p>
+              </mat-expansion-panel>
 
               @if (document.ai_missing_topics && document.ai_missing_topics.length > 0) {
-                <h4 class="ai-section-label warning-label">
-                  <mat-icon>warning</mat-icon>
-                  Tópicos faltantes
-                </h4>
-                <ul class="ai-list">
-                  @for (topic of document.ai_missing_topics; track topic) {
-                    <li>{{ topic }}</li>
-                  }
-                </ul>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="ai-panel-title warning-label">
+                      <mat-icon>warning</mat-icon>
+                      Tópicos faltantes ({{ document.ai_missing_topics.length }})
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <ul class="ai-list">
+                    @for (topic of document.ai_missing_topics; track topic) {
+                      <li>{{ topic }}</li>
+                    }
+                  </ul>
+                </mat-expansion-panel>
               }
 
               @if (document.ai_insights) {
-                <h4 class="ai-section-label">
-                  <mat-icon>lightbulb</mat-icon>
-                  Insights
-                </h4>
-                <p class="ai-insights-text">{{ document.ai_insights }}</p>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="ai-panel-title">
+                      <mat-icon>lightbulb</mat-icon>
+                      Insights
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p class="ai-insights-text">{{ document.ai_insights }}</p>
+                </mat-expansion-panel>
               }
-            </div>
+
+            </mat-accordion>
           }
         </mat-card-content>
 
         <mat-card-actions>
-          <button mat-stroked-button color="primary" (click)="reanalyze()" [disabled]="analyzeLoading">
+          <button mat-stroked-button color="primary" class="action-btn" (click)="reanalyze()" [disabled]="analyzeLoading">
             @if (analyzeLoading) {
               <mat-spinner diameter="18"></mat-spinner>
             } @else {
@@ -134,12 +149,6 @@
                   <app-status-chip [status]="s.status"></app-status-chip>
                 </td>
               </ng-container>
-              <ng-container matColumnDef="token">
-                <th mat-header-cell *matHeaderCellDef>Token</th>
-                <td mat-cell *matCellDef="let s">
-                  <code class="token-value">{{ s.token }}</code>
-                </td>
-              </ng-container>
               <ng-container matColumnDef="sign_url">
                 <th mat-header-cell *matHeaderCellDef>Link de assinatura</th>
                 <td mat-cell *matCellDef="let s">
@@ -148,6 +157,8 @@
                       <mat-icon class="link-icon">draw</mat-icon>
                       Assinar
                     </a>
+                  } @else {
+                    <span class="sign-link-empty">Aguardando ZapSign</span>
                   }
                 </td>
               </ng-container>

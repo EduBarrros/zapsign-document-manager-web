@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DatePipe } from '@angular/common';
@@ -25,6 +26,7 @@ import { StatusChipComponent } from '../../../shared/components/status-chip/stat
     MatProgressSpinnerModule,
     MatDividerModule,
     MatChipsModule,
+    MatExpansionModule,
     MatTableModule,
     MatTooltipModule,
     DatePipe,
@@ -37,7 +39,7 @@ export class DocumentDetailComponent implements OnInit {
   document: Document | null = null;
   loading = false;
   analyzeLoading = false;
-  signerColumns = ['name', 'email', 'status', 'token', 'sign_url'];
+  signerColumns = ['name', 'email', 'status', 'sign_url'];
 
   constructor(
     private route: ActivatedRoute,

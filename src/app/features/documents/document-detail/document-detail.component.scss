@@ -4,6 +4,12 @@
   margin-bottom: 16px;
 }
 
+.doc-card-header {
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 4px;
+}
+
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -78,18 +84,20 @@
   mat-icon { font-size: 48px; width: 48px; height: 48px; }
 }
 
-.ai-content { padding-top: 8px; }
+.ai-accordion {
+  display: block;
+  margin-top: 8px;
+}
 
-.ai-section-label {
+.ai-panel-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
+  gap: 8px;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
-  margin: 16px 0 8px;
+  color: rgba(0, 0, 0, 0.7);
 
-  mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
+  mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; }
 
   &.warning-label { color: #e65100; }
 }
@@ -126,6 +134,12 @@
   padding: 24px 0;
 }
 
+.sign-link-empty {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.38);
+  font-style: italic;
+}
+
 .sign-link {
   display: flex;
   align-items: center;
@@ -151,4 +165,10 @@
     grid-template-columns: 1fr;
   }
   .ai-card { grid-column: 1; }
+}
+
+::ng-deep .action-btn .mdc-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
