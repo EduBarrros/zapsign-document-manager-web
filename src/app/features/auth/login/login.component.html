@@ -5,17 +5,19 @@
         <mat-icon class="brand-icon">description</mat-icon>
         <h1 class="brand-title">ZapSign Manager</h1>
       </div>
-      <p class="brand-subtitle">Faça login para continuar</p>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Usuário</mat-label>
-          <mat-icon matPrefix>person</mat-icon>
-          <input matInput formControlName="username" autocomplete="username" />
-          @if (form.get('username')?.hasError('required') && form.get('username')?.touched) {
-            <mat-error>Usuário é obrigatório.</mat-error>
+          <mat-label>E-mail</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput formControlName="email" type="email" autocomplete="email" />
+          @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+            <mat-error>E-mail é obrigatório.</mat-error>
+          }
+          @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+            <mat-error>E-mail inválido.</mat-error>
           }
         </mat-form-field>
 
@@ -42,6 +44,13 @@
           }
         </mat-form-field>
 
+        @if (authError) {
+          <div class="auth-error-banner">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ authError }}</span>
+          </div>
+        }
+
         <button
           mat-raised-button
           color="primary"
@@ -55,6 +64,11 @@
             Entrar
           }
         </button>
+
+        <p class="auth-link">
+          Não tem uma conta?
+          <a routerLink="/signup">Cadastre-se</a>
+        </p>
       </form>
     </mat-card-content>
   </mat-card>

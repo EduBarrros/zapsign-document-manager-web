@@ -1,10 +1,12 @@
 export interface LoginDto {
-  username: string;
+  email: string;
   password: string;
 }
 
+// DRF token auth returns { token }, dj-rest-auth returns { key }
 export interface LoginResponse {
-  token: string;
+  token?: string;
+  key?: string;
 }
 
 export interface SignupDto {
