@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { DocumentService } from '../../../core/services/document.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -28,6 +29,7 @@ import { StatusChipComponent } from '../../../shared/components/status-chip/stat
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatChipsModule,
+    MatPaginatorModule,
     DatePipe,
     StatusChipComponent,
   ],
@@ -38,6 +40,9 @@ export class DocumentListComponent implements OnInit {
   documents: Document[] = [];
   displayedColumns = ['name', 'status', 'created_by', 'created_at', 'signers', 'actions'];
   loading = false;
+  totalCount = 0;
+  pageIndex = 0;
+  pageSize = 10;
 
   constructor(
     private documentService: DocumentService,
@@ -51,13 +56,20 @@ export class DocumentListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.documentService.list().subscribe({
+    this.documentService.listPaginated(this.pageIndex, this.pageSize).subscribe({
       next: (data) => {
-        this.documents = data;
+        this.documents = data.results;
+        this.totalCount = data.count;
         this.loading = false;
       },
       error: () => (this.loading = false),
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.load();
   }
 
   openCreate(): void {

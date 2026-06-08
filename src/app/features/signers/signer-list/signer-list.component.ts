@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SignerService } from '../../../core/services/signer.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Signer } from '../../../core/models';
@@ -23,6 +24,7 @@ import { StatusChipComponent } from '../../../shared/components/status-chip/stat
     MatCardModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatPaginatorModule,
     StatusChipComponent,
   ],
   templateUrl: './signer-list.component.html',
@@ -32,6 +34,9 @@ export class SignerListComponent implements OnInit {
   signers: Signer[] = [];
   displayedColumns = ['name', 'email', 'status', 'actions'];
   loading = false;
+  totalCount = 0;
+  pageIndex = 0;
+  pageSize = 10;
 
   constructor(
     private signerService: SignerService,
@@ -45,13 +50,20 @@ export class SignerListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.signerService.list().subscribe({
+    this.signerService.listPaginated(this.pageIndex, this.pageSize).subscribe({
       next: (data) => {
-        this.signers = data;
+        this.signers = data.results;
+        this.totalCount = data.count;
         this.loading = false;
       },
       error: () => (this.loading = false),
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.load();
   }
 
   openCreate(): void {
