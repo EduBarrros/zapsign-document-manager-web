@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 248px;
+  border-right: none;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+}
+
+.main-content {
+  padding: 32px 36px;
+  overflow-y: auto;
+  background-color: #f0f4f8;
+}

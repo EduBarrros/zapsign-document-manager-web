@@ -1,0 +1,13 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <button mat-icon-button (click)="toggleSidenav.emit()" aria-label="Abrir menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="brand">
+    <mat-icon class="brand-icon">description</mat-icon>
+    ZapSign Manager
+  </span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="logout()" matTooltip="Sair" aria-label="Sair">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Empresas</h1>
+      <p class="page-subtitle">Gerencie as empresas e seus tokens de API</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Nova Empresa
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-wrapper">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <mat-card>
+      <mat-card-content>
+        @if (companies.length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">business</mat-icon>
+            <p>Nenhuma empresa cadastrada.</p>
+            <button mat-stroked-button color="primary" (click)="openCreate()">
+              Cadastrar primeira empresa
+            </button>
+          </div>
+        } @else {
+          <table mat-table [dataSource]="companies" class="full-width-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nome</th>
+              <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef>Criada em</th>
+              <td mat-cell *matCellDef="let row">{{ row.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="last_updated_at">
+              <th mat-header-cell *matHeaderCellDef>Última atualização</th>
+              <td mat-cell *matCellDef="let row">{{ row.last_updated_at | date:'dd/MM/yyyy HH:mm' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" (click)="openEdit(row)" matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="confirmDelete(row)" matTooltip="Excluir">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <mat-paginator
+            [length]="totalCount"
+            [pageIndex]="pageIndex"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[10, 25, 50]"
+            (page)="onPageChange($event)"
+            aria-label="Selecionar página de empresas"
+          ></mat-paginator>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

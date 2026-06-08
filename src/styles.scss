@@ -1,0 +1,120 @@
+@use '@angular/material' as mat;
+@import '@angular/cdk/overlay-prebuilt.css';
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (scale: 0),
+));
+
+html {
+  @include mat.all-component-themes($theme);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #f0f4f8;
+}
+
+app-root {
+  display: block;
+  height: 100%;
+}
+
+/* ── Snack bars ── */
+.snack-success {
+  background-color: #43a047;
+  color: white;
+
+  .mat-mdc-button.mat-mdc-snack-bar-action { color: white; }
+}
+
+.snack-error {
+  background-color: #e53935;
+  color: white;
+
+  .mat-mdc-button.mat-mdc-snack-bar-action { color: white; }
+}
+
+/* ── Dialog ── */
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 12px;
+}
+
+/* ── Sidebar nav: desabilita o indicador M3 em todos os itens ── */
+.mat-mdc-nav-list .mdc-list-item {
+  --mat-list-active-indicator-color: transparent;
+  --mdc-list-list-item-label-text-color: rgba(0, 0, 0, 0.75);
+  --mdc-list-list-item-hover-label-text-color: rgba(0, 0, 0, 0.87);
+  --mdc-list-list-item-focus-label-text-color: rgba(0, 0, 0, 0.87);
+  --mdc-list-list-item-pressed-label-text-color: rgba(0, 0, 0, 0.87);
+  --mdc-list-list-item-selected-label-text-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Remove ripple visual no nav list */
+.mat-mdc-nav-list .mat-mdc-list-item .mat-ripple-element {
+  display: none !important;
+}
+
+/* ── Item ativo ── */
+.mat-mdc-nav-list a.active-link {
+  --mat-list-active-indicator-color: #e8f0fe;
+  --mdc-list-list-item-label-text-color: #1a56db;
+  --mdc-list-list-item-hover-label-text-color: #1a56db;
+  --mdc-list-list-item-focus-label-text-color: #1a56db;
+  --mdc-list-list-item-pressed-label-text-color: #1a56db;
+  --mdc-list-list-item-selected-label-text-color: #1a56db;
+  background-color: #e8f0fe !important;
+}
+
+.mat-mdc-nav-list a.active-link .mdc-list-item__primary-text,
+.mat-mdc-nav-list a.active-link .mat-mdc-list-item-unscoped-content {
+  color: #1a56db !important;
+}
+
+.mat-mdc-nav-list a.active-link mat-icon {
+  color: #1a56db !important;
+}
+
+/* ── Card ── */
+.mat-mdc-card {
+  --mdc-elevated-card-container-shape: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── Table ── */
+.mat-mdc-table {
+  --mat-table-background-color: transparent;
+  background: transparent;
+}
+
+.mat-mdc-header-row,
+.mat-mdc-row {
+  background: transparent;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #f0f5ff;
+}
+
+.mat-mdc-header-cell {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(0, 0, 0, 0.5) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-cell {
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Empresa' : 'Nova Empresa' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome da empresa</mat-label>
+      <input matInput formControlName="name" placeholder="Ex: Acme Corp" />
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+        <mat-error>Nome é obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ isEdit ? 'Novo token da API ZapSign (opcional)' : 'Token da API ZapSign' }}</mat-label>
+      <input matInput formControlName="api_token" placeholder="Cole o token gerado no sandbox" />
+      <mat-hint>Obtenha o token no painel do sandbox ZapSign</mat-hint>
+      @if (form.get('api_token')?.hasError('required') && form.get('api_token')?.touched) {
+        <mat-error>Token é obrigatório.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()" [disabled]="loading">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading || form.invalid">
+    @if (loading) {
+      <mat-spinner diameter="18" class="btn-spinner"></mat-spinner>
+    } @else {
+      {{ isEdit ? 'Salvar' : 'Criar' }}
+    }
+  </button>
+</mat-dialog-actions>
