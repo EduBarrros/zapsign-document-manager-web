@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -23,6 +24,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     MatCardModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatPaginatorModule,
     DatePipe,
   ],
   templateUrl: './company-list.component.html',
@@ -32,6 +34,9 @@ export class CompanyListComponent implements OnInit {
   companies: Company[] = [];
   displayedColumns = ['name', 'created_at', 'last_updated_at', 'actions'];
   loading = false;
+  totalCount = 0;
+  pageIndex = 0;
+  pageSize = 10;
 
   constructor(
     private companyService: CompanyService,
@@ -45,13 +50,20 @@ export class CompanyListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.companyService.list().subscribe({
+    this.companyService.listPaginated(this.pageIndex, this.pageSize).subscribe({
       next: (data) => {
-        this.companies = data;
+        this.companies = data.results;
+        this.totalCount = data.count;
         this.loading = false;
       },
       error: () => (this.loading = false),
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.load();
   }
 
   openCreate(): void {

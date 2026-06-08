@@ -24,6 +24,20 @@ export class DocumentService {
       .pipe(map((r) => r.results));
   }
 
+  listPaginated(
+    page = 0,
+    pageSize = 10,
+    filters?: { company?: number; status?: string }
+  ): Observable<PaginatedResponse<Document>> {
+    const params: Record<string, string> = {
+      page: (page + 1).toString(),
+      page_size: pageSize.toString(),
+    };
+    if (filters?.company) params['company'] = filters.company.toString();
+    if (filters?.status) params['status'] = filters.status;
+    return this.http.get<PaginatedResponse<Document>>(`${this.baseUrl}/`, { params });
+  }
+
   getById(id: number): Observable<Document> {
     return this.http.get<Document>(`${this.baseUrl}/${id}/`);
   }

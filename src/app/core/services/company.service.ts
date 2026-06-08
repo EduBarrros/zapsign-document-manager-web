@@ -16,6 +16,11 @@ export class CompanyService {
       .pipe(map((r) => r.results));
   }
 
+  listPaginated(page = 0, pageSize = 10): Observable<PaginatedResponse<Company>> {
+    const params = { page: (page + 1).toString(), page_size: pageSize.toString() };
+    return this.http.get<PaginatedResponse<Company>>(`${this.baseUrl}/`, { params });
+  }
+
   getById(id: number): Observable<Company> {
     return this.http.get<Company>(`${this.baseUrl}/${id}/`);
   }

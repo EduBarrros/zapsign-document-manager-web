@@ -19,6 +19,20 @@ export class SignerService {
       .pipe(map((r) => r.results));
   }
 
+  listPaginated(
+    page = 0,
+    pageSize = 10,
+    filters?: { document?: number; status?: string }
+  ): Observable<PaginatedResponse<Signer>> {
+    const params: Record<string, string> = {
+      page: (page + 1).toString(),
+      page_size: pageSize.toString(),
+    };
+    if (filters?.document) params['document'] = filters.document.toString();
+    if (filters?.status) params['status'] = filters.status;
+    return this.http.get<PaginatedResponse<Signer>>(`${this.baseUrl}/`, { params });
+  }
+
   getById(id: number): Observable<Signer> {
     return this.http.get<Signer>(`${this.baseUrl}/${id}/`);
   }
